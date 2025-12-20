@@ -1,0 +1,25 @@
+$a = INPUT
+
+$currentDial = 50
+$counter = 0
+-split $a | ForEach-Object { 
+    $_ -match '(L|R)(\d+)' | Out-Null
+    $number = $Matches[2] % 100
+    $currentDial = switch ($Matches[1]) {
+        L { 
+            if (($currentDial - $number) -lt 0) {
+                $currentDial - $number + 100
+            }
+            else { 
+                $currentDial - $number 
+            } 
+        }
+        R { 
+            [math]::Abs(($currentDial + $number) % 100) 
+        } 
+    }
+
+    if (0 -eq $currentDial ) { $counter += 1 }
+}
+
+$counter
